@@ -26,6 +26,7 @@ def main():
     app = QApplication([])
     window = MyGUI()
     app.exec_()
+    #lol
 
 
 if __name__ == '__main__':
