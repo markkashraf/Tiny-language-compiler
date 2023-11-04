@@ -1,6 +1,7 @@
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
+from Scanner import Scanner
 
 
 class MyGUI(QMainWindow):
@@ -8,25 +9,25 @@ class MyGUI(QMainWindow):
         super(MyGUI, self).__init__()
         uic.loadUi("UI_test/main_window.ui", self)
         self.show()
-
         self.pushButton.clicked.connect(self.open)
 
-    #initial testing
+    # initial testing
     def open(self):
         filename = QFileDialog.getOpenFileName()
         path = filename[0]
-        f = open(path,"r")
+        f = open(path, "r")
         st = ""
         for line in f.readlines():
             st = st + line
             st = st + "\n"
-
         self.textBrowser.setText(st)
+
+
 def main():
     app = QApplication([])
     window = MyGUI()
     app.exec_()
-    #lol
+    # lol
 
 
 if __name__ == '__main__':
