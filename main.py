@@ -27,6 +27,7 @@ def main():
     window = MyGUI()
     app.exec_()
     #lol
+    #la
 
 
 if __name__ == '__main__':
