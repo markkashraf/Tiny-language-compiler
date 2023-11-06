@@ -13,18 +13,18 @@ class Scanner:
     }
     KEYWORDS = ['else', 'end', 'if', 'repeat', 'then', 'until', 'read', 'write']
     OPERATORS = {
-        '+': 'PLUS',
-        '-': 'MINUS',
-        '*': 'MULTIPLY',
-        '/': 'DIVIDE',
-        ':': 'COLON',
-        '=': 'EQUALS',
-        ':=': 'ASSIGNMENT',
-        '>': 'GREATER',
-        '<': 'LESS',
-        ';': 'SEMICOLON',
-        '(': 'OPEN_PARENTHESIS',
-        ')': 'CLOSE_PARENTHESIS'
+        '+': 'Plus',
+        '-': 'Minus',
+        '*': 'Multiply',
+        '/': 'Divide',
+        ':': 'Colon',
+        '=': 'Equal',
+        ':=':'Assign',
+        '>': 'Greater',
+        '<': 'Less',
+        ';': 'Semicolon',
+        '(': 'OpenBracket',
+        ')': 'ClosedBracket'
     }
 
     # initialize states and set the current state to start.
@@ -127,20 +127,18 @@ class Scanner:
             token = token[0:-1]
         if is_str(token):
             if token in self.KEYWORDS:
-                self.tokens.append([token, token.upper()])
+                self.tokens.append([token, token])
             else:
-                self.tokens.append([token, 'IDENTIFIER'])
+                self.tokens.append([token, 'Identifier'])
         elif is_num(token):
-            self.tokens.append([token, 'NUMBER'])
+            self.tokens.append([token, 'Number'])
         elif token in self.OPERATORS:
             self.tokens.append([token, self.OPERATORS[token]])
         elif is_comment(token):
-            self.tokens.append([token, 'COMMENT'])
+            self.tokens.append([token[1:len(token)-1], 'Comment'])
 
     # export data to an output file
     def export(self):
         with open('output.txt', 'w') as f:
-            f.write('{:<12}  {:>12}\n'.format('TokenType', 'Value'))
-            f.write('{:<12}  {:>12}\n'.format('=====', '====='))
             for token in self.tokens:
-                f.write('{:<12}  {:>12}\n'.format(token[1], token[0]))
+                f.write('{:},{:}\n'.format(token[0], token[1]))
