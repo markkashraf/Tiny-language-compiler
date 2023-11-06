@@ -15,9 +15,17 @@ def is_symbol(token):
     return True if token in symbol else False
 
 
-def read_file(file_name):
+def is_comment(token):
+    if token[0] == '{' or token[-1] == '}':
+        return True
+    else:
+        return False
+
+
+def get_file_text(file_name):
     with open(file_name, 'r') as f:
         input_text = f.read()
         input_text = input_text.replace('\n', ' ')
         input_text += ' '
         return input_text
+

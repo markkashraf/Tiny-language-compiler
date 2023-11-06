@@ -15,7 +15,10 @@ class MyGUI(QMainWindow):
     def open(self):
         filename = QFileDialog.getOpenFileName()
         path = filename[0]
-        f = open(path, "r")
+        obj = Scanner()
+        obj.tokenize(path)
+        obj.export()
+        f = open("output.txt", "r")
         st = ""
         for line in f.readlines():
             st = st + line
@@ -27,10 +30,7 @@ def main():
     app = QApplication([])
     window = MyGUI()
     app.exec_()
-    # lol
 
 
 if __name__ == '__main__':
     main()
-
-#
