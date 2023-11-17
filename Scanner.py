@@ -141,4 +141,4 @@ class Scanner:
     def export(self):
         with open('output.txt', 'w') as f:
             for token in self.tokens:
-                f.write('{:},{:}\n'.format(token[0], token[1]))
+                f.write('{:}, {:}\n'.format(token[0], token[1]))
