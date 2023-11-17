@@ -43,6 +43,7 @@ class MyGUI(QMainWindow):
 def main():
     app = QApplication([])
     window = MyGUI()
+    window.setWindowTitle("Scanner")
     app.exec_()
 
 
