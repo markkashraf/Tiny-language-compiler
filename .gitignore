@@ -3,3 +3,7 @@ __pycache__
 /output.txt
 /.idea/
 /sample_input2.txt
+/sample_input3.txt
+/main.spec
+/dist/
+/build/

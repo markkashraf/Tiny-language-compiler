@@ -21,24 +21,17 @@ class MyGUI(QMainWindow):
         filename = QFileDialog.getOpenFileName()
         path = filename[0]
         self.filePath = path
-        f = open(path, "r",encoding='utf-8')
-        st = ""
-        for line in f.readlines():
-            st = st + line
-
-        self.textBrowser.setText(st)
+        f = open(path, "r",encoding='utf-8').read()
+        self.textBrowser.setText(f)
 
 
     def scan(self):
         obj = Scanner()
         obj.tokenize(self.filePath)
         obj.export()
-        f = open("output.txt", "r",encoding='utf-8')
-        st = ""
-        for line in f.readlines():
-            st = st + line
+        f = open("output.txt", "r",encoding='utf-8').read()
 
-        self.textBrowser_2.setText(st)
+        self.textBrowser_2.setText(f)
 
 def main():
     app = QApplication([])
