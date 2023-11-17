@@ -21,7 +21,7 @@ class MyGUI(QMainWindow):
         filename = QFileDialog.getOpenFileName()
         path = filename[0]
         self.filePath = path
-        f = open(path, "r")
+        f = open(path, "r",encoding='utf-8')
         st = ""
         for line in f.readlines():
             st = st + line
@@ -33,7 +33,7 @@ class MyGUI(QMainWindow):
         obj = Scanner()
         obj.tokenize(self.filePath)
         obj.export()
-        f = open("output.txt", "r")
+        f = open("output.txt", "r",encoding='utf-8')
         st = ""
         for line in f.readlines():
             st = st + line
