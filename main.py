@@ -1,11 +1,8 @@
 # from tkinter import *
 # from tkinter import filedialog
-
-import os
-from Scanner import Scanner
-from Parser import Parser
-import Util
-
+# from Scanner import Scanner
+# from Parser  import *
+import graphviz
 # root = Tk()
 
 # root.title('Tiny Language Compiler')
@@ -69,10 +66,16 @@ import Util
 
 # root.mainloop()
 
+import os
+
+import Util
 
 dirpath = os.getcwd()
 os.environ["PATH"] += os.pathsep + dirpath + os.pathsep + 'Graphviz\\bin'
 
+from Scanner import Scanner
+from Parser import Parser
+from Util import *
 Path = "sample_input.txt"
 sc_Obj = Scanner()
 Tokens = sc_Obj.tokenize(Path)
@@ -80,6 +83,6 @@ Tokens = sc_Obj.tokenize(Path)
 pr_obj = Parser()
 pr_obj.tokens=Tokens
 pr_obj.program()
-Util.generate_Parse_Tree(pr_obj.Nodes,pr_obj.tokens)
+Util.generate_tree(pr_obj.Nodes,pr_obj.tokens)
 
 

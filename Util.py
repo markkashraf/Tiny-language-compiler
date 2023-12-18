@@ -1,5 +1,4 @@
 from graphviz import Graph
-
 def is_str(token):
     return token.isalpha()
 
@@ -33,7 +32,7 @@ def get_file_text(file_name):
 
 
 
-def generate_Parse_Tree(Nodes,tokens):
+def generate_tree(Nodes,tokens):
     global iterator,connectParent,currentnode
     dot = Graph(comment='Syntax Tree',format = 'png')
     for Node in Nodes:
@@ -62,5 +61,7 @@ def generate_Parse_Tree(Nodes,tokens):
         tokens.pop()
     while (len(Nodes)):
         Nodes.pop()
-
+    iterator = 0
+    currentnode = 1
+    connectParent = True
     return
