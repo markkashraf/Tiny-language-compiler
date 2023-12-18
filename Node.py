@@ -1,4 +1,4 @@
-class Tree_node:
+class Node:
     id = 0
     parent_id = 0
     value = ""
