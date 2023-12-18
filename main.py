@@ -90,8 +90,12 @@ def parse():
     # parsing
     pr_obj = Parser()
     pr_obj.tokens = tokens
-    pr_obj.program()
-    Util.generate_Parse_Tree(pr_obj.Nodes, pr_obj.tokens)
+    try:
+        pr_obj.program()
+    except ValueError as v:
+        messagebox.showerror("Error", "Syntax error")
+    else:
+        Util.generate_Parse_Tree(pr_obj.Nodes, pr_obj.tokens)
 
 
 parse_button = Button(options_frame, text="PARSE", pady=10, padx=20, width=27, bg="#0081a7", fg="#90e0ef",

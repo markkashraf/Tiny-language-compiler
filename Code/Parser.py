@@ -9,7 +9,7 @@ class Parser:
         self.Nodes = []
         self.Parents = []
         self.Parents.append(0)
-
+        self.error = False
         self.current_node_id = 1
         self.connect_Parent = True
 
@@ -18,12 +18,10 @@ class Parser:
         if (self.tokens[self.iterator][0] == expectedtoken) or (self.tokens[self.iterator][1] == expectedtoken):
             self.iterator += 1
         else:
-            self.iterator = -1
-            self.error = True
+            raise ValueError()
 
     def program(self):
         self.stmtsequence()
-
     def stmtsequence(self):
 
         self.connect_Parent = True
@@ -64,11 +62,12 @@ class Parser:
         self.exp()
         self.match("then")
         self.stmtsequence()
-        if (self.tokens[self.iterator][0] == "else"):
+        if(self.iterator < len(self.tokens)):
+            if (self.tokens[self.iterator][0] == "else"):
 
-            self.match("else")
-            self.stmtsequence()
-        self.match("end")
+                self.match("else")
+                self.stmtsequence()
+            self.match("end")
 
     def repeat_stmt(self):
 
@@ -80,18 +79,21 @@ class Parser:
     def read_stmt(self):
 
         self.match("read")
-        if (self.tokens[self.iterator][1] == "IDENTIFIER"):
-            self.Nodes[-1].value = "read\n(" + self.tokens[self.iterator][0] + ")"
-            self.match("IDENTIFIER")
+        self.Nodes[-1].value = "read\n(" + self.tokens[self.iterator][0] + ")"
+        self.match("IDENTIFIER")
 
     def write_stmt(self):
         self.match("write")
+        if (not (self.tokens[self.iterator][1] == "IDENTIFIER" or
+                 self.tokens[self.iterator][1] == "NUMBER" or self.tokens[self.iterator][0] == '(')):
+
+            raise ValueError()
+
         self.exp()
         return
 
     def assign_stmt(self):
-        if (self.tokens[self.iterator][1] == "IDENTIFIER"):
-            self.match("IDENTIFIER")
+        self.match("IDENTIFIER")
         self.match(":=")
         self.exp()
         return
@@ -113,10 +115,15 @@ class Parser:
         nestedOp = 0
 
         while ((self.iterator < len(self.tokens)) and (self.tokens[self.iterator][0] == "+" or self.tokens[self.iterator][0] == "-")):
+            if (not(self.tokens[self.iterator-1][1] == "IDENTIFIER" or self.tokens[self.iterator-1][1] == "NUMBER")
+                    or not (self.tokens[self.iterator+1][1] == "IDENTIFIER" or self.tokens[self.iterator+1][1] == "NUMBER")):
+                raise ValueError()
 
-            self.addop()
-            self.term()
-            nestedOp += 1
+            else:
+                self.addop()
+                self.term()
+                nestedOp += 1
+
         while (nestedOp > 0):
             self.Parents.pop()
             nestedOp -= 1
@@ -130,9 +137,17 @@ class Parser:
         self.Nodes[self.current_node_id - 2].parent_id = self.Parents[-1]
         self.current_node_id = newnode.get_id() + 1
         if (self.tokens[self.iterator][0] == "<"):
-            self.match("<")
+            if (not(self.tokens[self.iterator-1][1] == "IDENTIFIER" or self.tokens[self.iterator-1][1] == "NUMBER")
+                    or not (self.tokens[self.iterator+1][1] == "IDENTIFIER" or self.tokens[self.iterator+1][1] == "NUMBER")):
+                raise ValueError()
+            else:
+                self.match("<")
         elif (self.tokens[self.iterator][0] == "="):
-            self.match("=")
+            if (not (self.tokens[self.iterator-1][1] == "IDENTIFIER" or self.tokens[self.iterator-1][1] == "NUMBER")
+                    or not (self.tokens[self.iterator+1][1] == "IDENTIFIER" or self.tokens[self.iterator+1][1] == "NUMBER")):
+                raise ValueError()
+            else:
+                self.match("=")
 
     def addop(self):
 
@@ -152,10 +167,13 @@ class Parser:
         nestedOp = 0
 
         while ((self.iterator < len(self.tokens))and(self.tokens[self.iterator][0] == "*" or self.tokens[self.iterator][0] == "/")):
-
-            self.mulop()
-            self.factor()
-            nestedOp += 1
+            if (not(self.tokens[self.iterator-1][1] == "IDENTIFIER" or self.tokens[self.iterator-1][1] == "NUMBER")
+                    or not (self.tokens[self.iterator+1][1] == "IDENTIFIER" or self.tokens[self.iterator+1][1] == "NUMBER")):
+                raise ValueError()
+            else:
+                self.mulop()
+                self.factor()
+                nestedOp += 1
 
 
         while (nestedOp > 0):
