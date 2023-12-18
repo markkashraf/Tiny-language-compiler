@@ -1,4 +1,3 @@
-
 from Code.Tree_node import Tree_node
 
 
@@ -14,7 +13,7 @@ class Parser:
         self.current_node_id = 1
         self.connect_Parent = True
 
-    def match(self,expectedtoken):
+    def match(self, expectedtoken):
         if (self.tokens[self.iterator][0] == expectedtoken) or (self.tokens[self.iterator][1] == expectedtoken):
             self.iterator += 1
         else:
@@ -33,7 +32,7 @@ class Parser:
             self.statment()
 
     def statment(self):
-        
+
         if (len(self.tokens)):
             newnode = Tree_node(self.tokens[self.iterator][0], self.current_node_id, self.Parents[-1])
             newnode.connect_Parent = self.connect_Parent
@@ -80,7 +79,7 @@ class Parser:
             self.match("Identifier")
 
     def write_stmt(self):
-        
+
         self.match("write")
         self.exp()
         return
@@ -93,7 +92,7 @@ class Parser:
         return
 
     def exp(self):
-        
+
         self.simple_exp()
         if (self.iterator < len(self.tokens)):
             if (self.tokens[self.iterator][0] == "<" or self.tokens[self.iterator][0] == "="):
@@ -103,7 +102,7 @@ class Parser:
         return
 
     def simple_exp(self):
-        
+
         self.term()
         nestedOp = 0
         if (self.iterator < len(self.tokens)):
@@ -117,7 +116,7 @@ class Parser:
         return
 
     def comparison_exp(self):
-        
+
         newnode = Tree_node("Op\n(" + self.tokens[self.iterator][0] + ")", self.current_node_id, self.Parents[-1])
         self.Nodes.append(newnode)
         self.Parents.append(newnode.get_id())
@@ -168,13 +167,14 @@ class Parser:
     def factor(self):
 
         if (self.tokens[self.iterator][1] == "Number"):
-            newnode = Tree_node("const\n(" + self.tokens[self.iterator][0] + ")", self.current_node_id, self.Parents[-1])
+            newnode = Tree_node("const\n(" + self.tokens[self.iterator][0] + ")", self.current_node_id,
+                                self.Parents[-1])
             self.Nodes.append(newnode)
             self.current_node_id = newnode.get_id() + 1
             self.match("Number")
         elif (self.tokens[self.iterator][1] == "Identifier"):
-            newnode = Tree_node("Identifier\n(" + self.tokens[self.iterator][0] + ")", self.current_node_id, self.Parents[-1])
+            newnode = Tree_node("Identifier\n(" + self.tokens[self.iterator][0] + ")", self.current_node_id,
+                                self.Parents[-1])
             self.Nodes.append(newnode)
             self.current_node_id = newnode.get_id() + 1
             self.match("Identifier")
-

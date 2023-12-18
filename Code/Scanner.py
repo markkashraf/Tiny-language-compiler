@@ -19,7 +19,7 @@ class Scanner:
         '/': 'Divide',
         ':': 'Colon',
         '=': 'Equal',
-        ':=':'Assign',
+        ':=': 'Assign',
         '>': 'Greater',
         '<': 'Less',
         ';': 'Semicolon',
