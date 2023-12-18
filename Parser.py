@@ -1,217 +1,179 @@
 from graphviz import Graph
+from Node import *
 import Scanner as src
-outputs = []
-iterator = 0
-Nodes = []
-Parents = []
-Parents.append(0)
-currentnode = 1
-connectParent = True
 
-class node:
-    parentNode = 0
-    value = ""
-    Node = 0
-    connectParent = True
-    def __init__(self,value,Node, parentNode):
-        self.Node = Node
-        self.parentNode = parentNode
-        self.value = value
-    def is_statment(self):
-        statment = ["if","repeat","assign","read","write"]
-        splitted = self.value.split("\n")
-        for token in splitted:
-            if(token in statment):
-                return True
-        return False
-    def getvalue(self):
-        return self.Node
-def match(expectedtoken):
-    global iterator
-    if(outputs[iterator][0]==expectedtoken)or(outputs[iterator][1]==expectedtoken):
-        iterator += 1
-    else:
-       iterator = -1
-def program():
-    global iterator
-    stmtsequence()
-def stmtsequence():
-    global iterator,connectParent
-    connectParent = True
-    statment()
+class Parser:
 
-    while(iterator < len(outputs) and outputs[iterator][0]==';'):
-        connectParent = False
-        match(";")
-        statment()
+    def __init__(self):
+        self.tokens = []
+        self.iterator = 0
+        self.Nodes = []
+        self.Parents = []
+        self.Parents.append(0)
+        self.currentnode = 1
+        self.connect_Parent = True
 
-def statment():
-    global iterator,currentnode,connectParent
-    if(len(outputs)):
-        newnode = node(outputs[iterator][0],currentnode, Parents[-1])
-        newnode.connectParent =connectParent
-        Nodes.append(newnode)
-        currentnode = newnode.getvalue() + 1
-        Parents.append(newnode.getvalue())
-        if(outputs[iterator][0]=="if"):
-            if_stmt()
-            Parents.pop()
-        elif(outputs[iterator][0]=="repeat"):
-            repeat_stmt()
-            Parents.pop()
-        elif(outputs[iterator][0]=="read"):
-            read_stmt()
-            Parents.pop()
-        elif(outputs[iterator][0]=="write"):
-            write_stmt()
-            Parents.pop()
+    def match(self,expectedtoken):
+        if (self.tokens[self.iterator][0] == expectedtoken) or (self.tokens[self.iterator][1] == expectedtoken):
+            self.iterator += 1
         else:
-            Nodes[-1].value = "assign\n(" + outputs[iterator][0] + ")"
-            assign_stmt()
-            Parents.pop()
-def if_stmt():
-    global iterator,currentnode
-    match("if")
-    exp()
-    match("then")
-    stmtsequence()
-    if(outputs[iterator][0]=="else"):
-        match("else")
-        stmtsequence()
-    match("end")
-def repeat_stmt():
-    global iterator,currentnode
-    match("repeat")
-    stmtsequence()
-    match("until")
-    exp()
-def read_stmt():
-    global iterator,currentnode
-    match("read")
-    if(outputs[iterator][1]=="Identifier"):
-        Nodes[-1].value = "read\n(" + outputs[iterator][0] + ")"
-        match("Identifier")
-def write_stmt():
-    global iterator
-    match("write")
-    exp()
-    return
-def assign_stmt():
-    global iterator,currentnode
-    if(outputs[iterator][1]=="Identifier"):
-        match("Identifier")
-    match(":=")
-    exp()
-    return
-def exp():
-    global iterator,currentnode
-    simple_exp()
-    if (iterator < len(outputs)):
-        if (outputs[iterator][0]=="<"or outputs[iterator][0]=="="):
-            comparison_exp()
-            simple_exp()
-            Parents.pop()
-    return
-def simple_exp():
-    global iterator,currentnode
-    term()
-    nestedOp=0
-    if (iterator < len(outputs)):
-        while (outputs[iterator][0]=="+"or outputs[iterator][0]=="-"):
-            addop()
-            term()
-            nestedOp+=1
-    while(nestedOp>0):
-        Parents.pop()
-        nestedOp-=1
-    return
-def comparison_exp():
-    global iterator,currentnode
-    newnode = node("Op\n("+outputs[iterator][0]+")",currentnode, Parents[-1])
-    Nodes.append(newnode)
-    Parents.append(newnode.getvalue())
-    Nodes[currentnode-2].parentNode = Parents[-1]
-    currentnode = newnode.getvalue() + 1
-    if(outputs[iterator][0]=="<"):
-        match("<")
-    elif(outputs[iterator][0]=="="):
-        match("=")
-def addop():
-    global iterator,currentnode
-    newnode = node("Op\n("+outputs[iterator][0]+")",currentnode, Parents[-1])
-    Nodes.append(newnode)
-    Parents.append(newnode.getvalue())
-    Nodes[currentnode-2].parentNode = Parents[-1]
-    currentnode = newnode.getvalue() + 1
-    if(outputs[iterator][0]=="+"):
-        match("+")
-    elif(outputs[iterator][0]=="-"):
-        match("-")
-def term():
-    global iterator,currentnode
-    factor()
-    nestedOp=0
-    if(iterator<len(outputs)):
-        while (outputs[iterator][0] == "*"):
-            mulop()
-            factor()
-            nestedOp += 1
-    while(nestedOp>0):
-        Parents.pop()
-        nestedOp-=1
-def mulop():
-    global iterator,currentnode
-    newnode = node("Op\n("+outputs[iterator][0]+")",currentnode, Parents[-1])
-    Nodes.append(newnode)
-    Parents.append(newnode.getvalue())
-    Nodes[currentnode-2].parentNode = Parents[-1]
-    currentnode = newnode.getvalue() + 1
-    if(outputs[iterator][0]=="*"):
-        match("*")
-    elif(outputs[iterator][0]=="/"):
-        match("/")
-def factor():
-    global iterator,currentnode
-    if(outputs[iterator][1]=="Number"):
-        newnode = node("const\n("+outputs[iterator][0]+")",currentnode, Parents[-1])
-        Nodes.append(newnode)
-        currentnode = newnode.getvalue() + 1
-        match("Number")
-    elif(outputs[iterator][1]=="Identifier"):
-        newnode = node("Identifier\n("+outputs[iterator][0]+")",currentnode, Parents[-1])
-        Nodes.append(newnode)
-        currentnode = newnode.getvalue() + 1
-        match("Identifier")
-def generate_tree():
-    global iterator,connectParent,currentnode
-    dot = Graph(comment='Syntax Tree',format = 'png')
-    for Node in Nodes:
-        if(Node.is_statment()):
-            dot.node(str(Node.Node),Node.value,shape='square')
-        else:
-            dot.node(str(Node.Node),Node.value)
-    for Node in Nodes:
-        if(Node.parentNode!=0)and (Node.connectParent):
-            dot.edge(str(Node.parentNode),str(Node.Node))
-        elif (Node.parentNode!=0):
-            dot.edge(str(Node.parentNode),str(Node.Node),style='dashed', color='white')
-    for number in range(len(Nodes)):
-        for number2 in range(number+1,len(Nodes)):
-            if((Nodes[number].parentNode==Nodes[number2].parentNode) and
-            (not Nodes[number2].connectParent)and
-            Nodes[number2].is_statment() and (Nodes[number].is_statment())):
-                dot.edge(str(Nodes[number].Node),str(Nodes[number2].Node),constraint='false')
-                break
-            elif((Nodes[number].parentNode==Nodes[number2].parentNode) and
-            (Nodes[number2].connectParent)and
-            Nodes[number2].is_statment() and (Nodes[number].is_statment())):
-                break
-    dot.render('Syntax-Tree.gv',view=True)
-    while (len(outputs)):
-        outputs.pop()
-    while (len(Nodes)):
-        Nodes.pop()
-    iterator = 0
-    currentnode = 1
-    connectParent = True
-    return
+            self.iterator = -1
+
+    def program(self):
+        self.stmtsequence()
+
+    def stmtsequence(self):
+        self.connect_Parent = True
+        self.statment()
+
+        while (self.iterator < len(self.tokens) and self.tokens[self.iterator][0] == ';'):
+            self.connect_Parent = False
+            self.match(";")
+            self.statment()
+
+    def statment(self):
+        
+        if (len(self.tokens)):
+            newnode = Node(self.tokens[self.iterator][0], self.currentnode, self.Parents[-1])
+            newnode.connect_Parent = self.connect_Parent
+            self.Nodes.append(newnode)
+            self.currentnode = newnode.get_id() + 1
+            self.Parents.append(newnode.get_id())
+            if (self.tokens[self.iterator][0] == "if"):
+                self.if_stmt()
+                self.Parents.pop()
+            elif (self.tokens[self.iterator][0] == "repeat"):
+                self.repeat_stmt()
+                self.Parents.pop()
+            elif (self.tokens[self.iterator][0] == "read"):
+                self.read_stmt()
+                self.Parents.pop()
+            elif (self.tokens[self.iterator][0] == "write"):
+                self.write_stmt()
+                self.Parents.pop()
+            else:
+                self.Nodes[-1].value = "assign\n(" + self.tokens[self.iterator][0] + ")"
+                self.assign_stmt()
+                self.Parents.pop()
+
+    def if_stmt(self):
+        self.match("if")
+        self.exp()
+        self.match("then")
+        self.stmtsequence()
+        if (self.tokens[self.iterator][0] == "else"):
+            self.match("else")
+            self.stmtsequence()
+        self.match("end")
+
+    def repeat_stmt(self):
+        self.match("repeat")
+        self.stmtsequence()
+        self.match("until")
+        self.exp()
+
+    def read_stmt(self):
+        self.match("read")
+        if (self.tokens[self.iterator][1] == "Identifier"):
+            self.Nodes[-1].value = "read\n(" + self.tokens[self.iterator][0] + ")"
+            self.match("Identifier")
+
+    def write_stmt(self):
+        
+        self.match("write")
+        self.exp()
+        return
+
+    def assign_stmt(self):
+        if (self.tokens[self.iterator][1] == "Identifier"):
+            self.match("Identifier")
+        self.match(":=")
+        self.exp()
+        return
+
+    def exp(self):
+        
+        self.simple_exp()
+        if (self.iterator < len(self.tokens)):
+            if (self.tokens[self.iterator][0] == "<" or self.tokens[self.iterator][0] == "="):
+                self.comparison_exp()
+                self.simple_exp()
+                self.Parents.pop()
+        return
+
+    def simple_exp(self):
+        
+        self.term()
+        nestedOp = 0
+        if (self.iterator < len(self.tokens)):
+            while (self.tokens[self.iterator][0] == "+" or self.tokens[self.iterator][0] == "-"):
+                self.addop()
+                self.term()
+                nestedOp += 1
+        while (nestedOp > 0):
+            self.Parents.pop()
+            nestedOp -= 1
+        return
+
+    def comparison_exp(self):
+        
+        newnode = Node("Op\n(" + self.tokens[self.iterator][0] + ")", self.currentnode, self.Parents[-1])
+        self.Nodes.append(newnode)
+        self.Parents.append(newnode.get_id())
+        self.Nodes[self.currentnode - 2].parentNode = self.Parents[-1]
+        self.currentnode = newnode.get_id() + 1
+        if (self.tokens[self.iterator][0] == "<"):
+            self.match("<")
+        elif (self.tokens[self.iterator][0] == "="):
+            self.match("=")
+
+    def addop(self):
+
+        newnode = Node("Op\n(" + self.tokens[self.iterator][0] + ")", self.currentnode, self.Parents[-1])
+        self.Nodes.append(newnode)
+        self.Parents.append(newnode.get_id())
+        self.Nodes[self.currentnode - 2].parentNode = self.Parents[-1]
+        self.currentnode = newnode.get_id() + 1
+        if (self.tokens[self.iterator][0] == "+"):
+            self.match("+")
+        elif (self.tokens[self.iterator][0] == "-"):
+            self.match("-")
+
+    def term(self):
+
+        self.factor()
+        nestedOp = 0
+        if (self.iterator < len(self.tokens)):
+            while (self.tokens[self.iterator][0] == "*"):
+                self.mulop()
+                self.factor()
+                nestedOp += 1
+        while (nestedOp > 0):
+            self.Parents.pop()
+            nestedOp -= 1
+
+    def mulop(self):
+
+        newnode = Node("Op\n(" + self.tokens[self.iterator][0] + ")", self.currentnode, self.Parents[-1])
+        self.Nodes.append(newnode)
+        self.Parents.append(newnode.get_id())
+        self.Nodes[self.currentnode - 2].parentNode = self.Parents[-1]
+        self.currentnode = newnode.get_id() + 1
+        if (self.tokens[self.iterator][0] == "*"):
+            self.match("*")
+        elif (self.tokens[self.iterator][0] == "/"):
+            self.match("/")
+
+    def factor(self):
+
+        if (self.tokens[self.iterator][1] == "Number"):
+            newnode = Node("const\n(" + self.tokens[self.iterator][0] + ")", self.currentnode, self.Parents[-1])
+            self.Nodes.append(newnode)
+            self.currentnode = newnode.get_id() + 1
+            self.match("Number")
+        elif (self.tokens[self.iterator][1] == "Identifier"):
+            newnode = Node("Identifier\n(" + self.tokens[self.iterator][0] + ")", self.currentnode, self.Parents[-1])
+            self.Nodes.append(newnode)
+            self.currentnode = newnode.get_id() + 1
+            self.match("Identifier")
+

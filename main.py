@@ -67,18 +67,22 @@ import graphviz
 # root.mainloop()
 
 import os
+
+import Util
+
 dirpath = os.getcwd()
 os.environ["PATH"] += os.pathsep + dirpath + os.pathsep + 'Graphviz\\bin'
 
 from Scanner import Scanner
-import Parser as pr
-
+from Parser import Parser
+from Util import *
 Path = "sample_input.txt"
-Obj = Scanner()
-Tokens = Obj.tokenize(Path)
-pr.outputs=Tokens
-pr.program()
-pr.generate_tree()
-n = pr.Nodes
-print(pr.Nodes)
+sc_Obj = Scanner()
+Tokens = sc_Obj.tokenize(Path)
+
+pr_obj = Parser()
+pr_obj.tokens=Tokens
+pr_obj.program()
+Util.generate_tree(pr_obj.Nodes,pr_obj.tokens)
+
 
