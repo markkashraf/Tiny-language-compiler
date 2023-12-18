@@ -24,6 +24,14 @@ def is_comment(token):
         return False
 
 
+def is_statment(Node):
+    statment = ["if","repeat","assign","read","write"]
+    str = Node.value.split("\n")
+    for token in str:
+        if token in statment:
+            return True
+        return False
+
 def get_file_text(file_name):
     with open(file_name, 'r') as f:
         input_text = f.read()
@@ -37,7 +45,7 @@ def generate_Parse_Tree(Nodes,tokens):
     global iterator,connectParent,currentnode
     dot = Graph(comment='Syntax Tree',format = 'png')
     for Node in Nodes:
-        if(Node.is_statment()):
+        if(is_statment(Node)):
             dot.node(str(Node.id),Node.value,shape='square')
         else:
             dot.node(str(Node.id),Node.value)
@@ -46,16 +54,16 @@ def generate_Parse_Tree(Nodes,tokens):
             dot.edge(str(Node.parent_id),str(Node.id))
         elif (Node.parent_id!=0):
             dot.edge(str(Node.parent_id),str(Node.id),style='dashed', color='white')
-    for number in range(len(Nodes)):
-        for number2 in range(number+1,len(Nodes)):
-            if((Nodes[number].parent_id==Nodes[number2].parent_id) and
-            (not Nodes[number2].connect_Parent)and
-            Nodes[number2].is_statment() and (Nodes[number].is_statment())):
-                dot.edge(str(Nodes[number].id),str(Nodes[number2].id),constraint='false')
+    for i in range(len(Nodes)):
+        for j in range(i+1,len(Nodes)):
+            if((Nodes[i].parent_id==Nodes[j].parent_id) and
+            (not Nodes[j].connect_Parent)and
+            is_statment(Nodes[j]) and (is_statment(Nodes[i]))):
+                dot.edge(str(Nodes[i].id),str(Nodes[j].id),constraint='false')
                 break
-            elif((Nodes[number].parent_id==Nodes[number2].parent_id) and
-                 (Nodes[number2].connect_Parent) and
-                 Nodes[number2].is_statment() and (Nodes[number].is_statment())):
+            elif((Nodes[i].parent_id==Nodes[j].parent_id) and
+                 (Nodes[j].connect_Parent) and
+                 is_statment(Nodes[j]) and (is_statment(Nodes[i]))):
                 break
     dot.render('Syntax-Tree.gv',view=True)
     while (len(tokens)):
