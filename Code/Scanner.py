@@ -128,13 +128,13 @@ class Scanner:
             token = token[0:-1]
         if Util.is_str(token):
             if token in self.KEYWORDS:
-                self.tokens.append([token, token.upper()])
+                self.tokens.append([token, token])
             else:
-                self.tokens.append([token, 'IDENTIFIER'])
+                self.tokens.append([token, 'Identifier'])
         elif Util.is_num(token):
-            self.tokens.append([token, 'NUMBER'])
+            self.tokens.append([token, 'Number'])
         elif token in self.OPERATORS:
-            self.tokens.append([token, self.OPERATORS[token].upper()])
+            self.tokens.append([token, self.OPERATORS[token]])
         # elif is_comment(token):
         #     self.tokens.append([token[1:len(token)-1], 'Comment'])
 
