@@ -5,5 +5,7 @@ __pycache__
 /sample_input2.txt
 /sample_input3.txt
 /main.spec
+/Syntax-Tree.gv
+/Syntax-Tree.gv.png
 /dist/
 /build/
