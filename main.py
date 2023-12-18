@@ -86,12 +86,8 @@ def parse():
     # parsing
     pr_obj = Parser()
     pr_obj.tokens = tokens
-    status = pr_obj.program()
-    if status:
-        messagebox.showerror("Error","Syntax error\n"
-                                     "This code is not accepted by tiny language")
-    else:
-        Util.generate_Parse_Tree(pr_obj.Nodes, pr_obj.tokens)
+    pr_obj.program()
+    Util.generate_Parse_Tree(pr_obj.Nodes, pr_obj.tokens)
 
 
 parse_button = Button(options_frame, text="PARSE", pady=10, padx=20, width=27, command=parse)
