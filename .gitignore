@@ -4,6 +4,8 @@ __pycache__
 /.idea/
 /sample_input2.txt
 /sample_input3.txt
+/Syntax-Tree.gv.png
+/Syntax-Tree.gv
 /main.spec
 /dist/
 /build/
