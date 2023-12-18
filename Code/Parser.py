@@ -74,9 +74,9 @@ class Parser:
 
     def read_stmt(self):
         self.match("read")
-        if (self.tokens[self.iterator][1] == "Identifier"):
+        if (self.tokens[self.iterator][1] == "IDENTIFIER"):
             self.Nodes[-1].value = "read\n(" + self.tokens[self.iterator][0] + ")"
-            self.match("Identifier")
+            self.match("IDENTIFIER")
 
     def write_stmt(self):
 
@@ -85,8 +85,8 @@ class Parser:
         return
 
     def assign_stmt(self):
-        if (self.tokens[self.iterator][1] == "Identifier"):
-            self.match("Identifier")
+        if (self.tokens[self.iterator][1] == "IDENTIFIER"):
+            self.match("IDENTIFIER")
         self.match(":=")
         self.exp()
         return
@@ -166,15 +166,15 @@ class Parser:
 
     def factor(self):
 
-        if (self.tokens[self.iterator][1] == "Number"):
+        if (self.tokens[self.iterator][1] == "NUMBER"):
             newnode = Tree_node("const\n(" + self.tokens[self.iterator][0] + ")", self.current_node_id,
                                 self.Parents[-1])
             self.Nodes.append(newnode)
             self.current_node_id = newnode.get_id() + 1
-            self.match("Number")
-        elif (self.tokens[self.iterator][1] == "Identifier"):
+            self.match("NUMBER")
+        elif (self.tokens[self.iterator][1] == "IDENTIFIER"):
             newnode = Tree_node("Identifier\n(" + self.tokens[self.iterator][0] + ")", self.current_node_id,
                                 self.Parents[-1])
             self.Nodes.append(newnode)
             self.current_node_id = newnode.get_id() + 1
-            self.match("Identifier")
+            self.match("IDENTIFIER")
