@@ -1,4 +1,4 @@
-#from graphviz import Graph
+from graphviz import Graph
 import Scanner as src
 outputs = []
 iterator = 0
@@ -182,36 +182,36 @@ def factor():
         Nodes.append(newnode)
         currentnode = newnode.getvalue() + 1
         match("Identifier")
-# def generate_tree():
-#     global iterator,connectParent,currentnode
-#     dot = Graph(comment='Syntax Tree',format = 'png')
-#     for Node in Nodes:
-#         if(Node.is_statment()):
-#             dot.node(str(Node.Node),Node.value,shape='square')
-#         else:
-#             dot.node(str(Node.Node),Node.value)
-#     for Node in Nodes:
-#         if(Node.parentNode!=0)and (Node.connectParent):
-#             dot.edge(str(Node.parentNode),str(Node.Node))
-#         elif (Node.parentNode!=0):
-#             dot.edge(str(Node.parentNode),str(Node.Node),style='dashed', color='white')
-#     for number in range(len(Nodes)):
-#         for number2 in range(number+1,len(Nodes)):
-#             if((Nodes[number].parentNode==Nodes[number2].parentNode) and
-#             (not Nodes[number2].connectParent)and
-#             Nodes[number2].is_statment() and (Nodes[number].is_statment())):
-#                 dot.edge(str(Nodes[number].Node),str(Nodes[number2].Node),constraint='false')
-#                 break
-#             elif((Nodes[number].parentNode==Nodes[number2].parentNode) and
-#             (Nodes[number2].connectParent)and
-#             Nodes[number2].is_statment() and (Nodes[number].is_statment())):
-#                 break
-#     dot.render('test-output/Syntax-Tree.gv',view=True)
-#     while (len(outputs)):
-#         outputs.pop()
-#     while (len(Nodes)):
-#         Nodes.pop()
-#     iterator = 0
-#     currentnode = 1
-#     connectParent = True
-#     return
+def generate_tree():
+    global iterator,connectParent,currentnode
+    dot = Graph(comment='Syntax Tree',format = 'png')
+    for Node in Nodes:
+        if(Node.is_statment()):
+            dot.node(str(Node.Node),Node.value,shape='square')
+        else:
+            dot.node(str(Node.Node),Node.value)
+    for Node in Nodes:
+        if(Node.parentNode!=0)and (Node.connectParent):
+            dot.edge(str(Node.parentNode),str(Node.Node))
+        elif (Node.parentNode!=0):
+            dot.edge(str(Node.parentNode),str(Node.Node),style='dashed', color='white')
+    for number in range(len(Nodes)):
+        for number2 in range(number+1,len(Nodes)):
+            if((Nodes[number].parentNode==Nodes[number2].parentNode) and
+            (not Nodes[number2].connectParent)and
+            Nodes[number2].is_statment() and (Nodes[number].is_statment())):
+                dot.edge(str(Nodes[number].Node),str(Nodes[number2].Node),constraint='false')
+                break
+            elif((Nodes[number].parentNode==Nodes[number2].parentNode) and
+            (Nodes[number2].connectParent)and
+            Nodes[number2].is_statment() and (Nodes[number].is_statment())):
+                break
+    dot.render('Syntax-Tree.gv',view=True)
+    while (len(outputs)):
+        outputs.pop()
+    while (len(Nodes)):
+        Nodes.pop()
+    iterator = 0
+    currentnode = 1
+    connectParent = True
+    return

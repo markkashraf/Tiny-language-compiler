@@ -2,7 +2,7 @@
 # from tkinter import filedialog
 # from Scanner import Scanner
 # from Parser  import *
-
+import graphviz
 # root = Tk()
 
 # root.title('Tiny Language Compiler')
@@ -66,6 +66,9 @@
 
 # root.mainloop()
 
+import os
+dirpath = os.getcwd()
+os.environ["PATH"] += os.pathsep + dirpath + os.pathsep + 'Graphviz\\bin'
 
 from Scanner import Scanner
 import Parser as pr
@@ -75,7 +78,7 @@ Obj = Scanner()
 Tokens = Obj.tokenize(Path)
 pr.outputs=Tokens
 pr.program()
-
+pr.generate_tree()
 n = pr.Nodes
 print(pr.Nodes)
 
