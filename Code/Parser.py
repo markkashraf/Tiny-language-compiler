@@ -1,5 +1,6 @@
 
-from Tree_node import *
+from Code.Tree_node import Tree_node
+
 
 class Parser:
 

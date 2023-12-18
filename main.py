@@ -2,9 +2,9 @@
 # from tkinter import filedialog
 
 import os
-from Scanner import Scanner
-from Parser import Parser
-import Util
+from Code.Scanner import Scanner
+from Code.Parser import Parser
+from Code import Util
 
 # root = Tk()
 
@@ -80,6 +80,6 @@ Tokens = sc_Obj.tokenize(Path)
 pr_obj = Parser()
 pr_obj.tokens=Tokens
 pr_obj.program()
-Util.generate_Parse_Tree(pr_obj.Nodes,pr_obj.tokens)
+Util.generate_Parse_Tree(pr_obj.Nodes, pr_obj.tokens)
 
 
