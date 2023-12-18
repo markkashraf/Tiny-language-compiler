@@ -53,11 +53,12 @@ options_frame = LabelFrame(root, text="OPTIONS:", padx=20, pady=20, bg="#fed9b7"
 options_frame.grid(row=0, column=1)
 
 output_text = Text(options_frame, width=60, height=20, bg="#fdfcdc")
-output_text.insert(END, "Output")
+#output_text.insert(END, "Output")
 output_text.config(state="disabled")
-output_text.grid(row=0, column=0, columnspan=3, pady=5)
+output_text.grid(row=1, column=0, columnspan=3, pady=5)
 
-
+label1 = Label(options_frame,text="Tokens",bg="#fed9b7")
+label1.grid(row=0, column=0, columnspan=3, pady=0)
 def scan():
     global filepath
     obj = Scanner()
