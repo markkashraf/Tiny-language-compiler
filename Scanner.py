@@ -120,6 +120,7 @@ class Scanner:
                 else:
                     token = ''
                 self.change_current_state('START')
+        return self.tokens
 
     # classify each token to its type in a dictionary (will be later used in formatting the output).
     def classify(self, token):
