@@ -135,8 +135,8 @@ class Scanner:
             self.tokens.append([token, 'Number'])
         elif token in self.OPERATORS:
             self.tokens.append([token, self.OPERATORS[token]])
-        elif is_comment(token):
-            self.tokens.append([token[1:len(token)-1], 'Comment'])
+        # elif is_comment(token):
+        #     self.tokens.append([token[1:len(token)-1], 'Comment'])
 
     # export data to an output file
     def export(self):

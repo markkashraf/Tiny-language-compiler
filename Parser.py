@@ -7,6 +7,7 @@ Parents = []
 Parents.append(0)
 currentnode = 1
 connectParent = True
+
 class node:
     parentNode = 0
     value = ""
@@ -38,10 +39,12 @@ def stmtsequence():
     global iterator,connectParent
     connectParent = True
     statment()
-    while( outputs[iterator][0]==';'):
+
+    while(iterator < len(outputs) and outputs[iterator][0]==';'):
         connectParent = False
         match(";")
         statment()
+
 def statment():
     global iterator,currentnode,connectParent
     if(len(outputs)):
@@ -96,26 +99,28 @@ def write_stmt():
 def assign_stmt():
     global iterator,currentnode
     if(outputs[iterator][1]=="Identifier"):
-        match("ID")
+        match("Identifier")
     match(":=")
     exp()
     return
 def exp():
     global iterator,currentnode
     simple_exp()
-    if (outputs[iterator][0]=="<"or outputs[iterator][0]=="="):
-        comparison_exp()
-        simple_exp()
-        Parents.pop()
+    if (iterator < len(outputs)):
+        if (outputs[iterator][0]=="<"or outputs[iterator][0]=="="):
+            comparison_exp()
+            simple_exp()
+            Parents.pop()
     return
 def simple_exp():
     global iterator,currentnode
     term()
     nestedOp=0
-    while (outputs[iterator][0]=="+"or outputs[iterator][0]=="-"):
-        addop()
-        term()
-        nestedOp+=1
+    if (iterator < len(outputs)):
+        while (outputs[iterator][0]=="+"or outputs[iterator][0]=="-"):
+            addop()
+            term()
+            nestedOp+=1
     while(nestedOp>0):
         Parents.pop()
         nestedOp-=1
@@ -146,10 +151,11 @@ def term():
     global iterator,currentnode
     factor()
     nestedOp=0
-    while(outputs[iterator][0]=="*"):
-        mulop()
-        factor()
-        nestedOp+=1
+    if(iterator<len(outputs)):
+        while (outputs[iterator][0] == "*"):
+            mulop()
+            factor()
+            nestedOp += 1
     while(nestedOp>0):
         Parents.pop()
         nestedOp-=1
@@ -166,20 +172,16 @@ def mulop():
         match("/")
 def factor():
     global iterator,currentnode
-    if(outputs[iterator][0]=="("):
-        match("(")
-        exp()
-        match(")")
-    elif(outputs[iterator][1]=="Number"):
+    if(outputs[iterator][1]=="Number"):
         newnode = node("const\n("+outputs[iterator][0]+")",currentnode, Parents[-1])
         Nodes.append(newnode)
         currentnode = newnode.getvalue() + 1
-        match("NUM")
+        match("Number")
     elif(outputs[iterator][1]=="Identifier"):
-        newnode = node("ID\n("+outputs[iterator][0]+")",currentnode, Parents[-1])
+        newnode = node("Identifier\n("+outputs[iterator][0]+")",currentnode, Parents[-1])
         Nodes.append(newnode)
         currentnode = newnode.getvalue() + 1
-        match("ID")
+        match("Identifier")
 # def generate_tree():
 #     global iterator,connectParent,currentnode
 #     dot = Graph(comment='Syntax Tree',format = 'png')

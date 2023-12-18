@@ -76,5 +76,6 @@ Tokens = Obj.tokenize(Path)
 pr.outputs=Tokens
 pr.program()
 
-print(pr.Nodes[1].value)
+n = pr.Nodes
+print(pr.Nodes)
 
