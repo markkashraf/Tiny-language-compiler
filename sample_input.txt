@@ -3,7 +3,12 @@ if 0 < x then { don’t compute if x <= 0 }
     fact := 1;
     repeat
         fact := fact * x;
-        x := x - 1
+        x := x + 2 * 3
     until x = 0;
     write fact { output factorial of x }
+else
+    read b;
+    if b = 1 then
+        write b*x
+    end
 end

@@ -33,7 +33,19 @@ def is_statment(Node):
             return True
         return False
 
+def check_left(tokens,it):
+    if (not (tokens[it - 1][1] == "IDENTIFIER" or tokens[it - 1][
+        1] == "NUMBER" or tokens[it - 1][0] == ')')):
+        return False
+    else:
+        return True
 
+def check_right(tokens,it):
+    if (not (tokens[it + 1][1] == "IDENTIFIER" or tokens[it + 1][
+        1] == "NUMBER" or tokens[it + 1][0] == '(')):
+        return False
+    else:
+        return True
 def get_file_text(file_name):
     with open(file_name, 'r') as f:
         input_text = f.read()
