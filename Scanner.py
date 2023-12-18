@@ -1,4 +1,4 @@
-from Code import Util
+from Util import *
 
 
 class Scanner:
@@ -48,21 +48,21 @@ class Scanner:
     # Ex: if we are in the start state, and we find a '{' we transition to the comment state.
 
     def tokenize(self, input_file):
-        input_text = Util.get_file_text(input_file)
+        input_text = get_file_text(input_file)
         token = ''
         for c in input_text:
             if self.check_state('START'):
-                if Util.is_symbol(c):
+                if is_symbol(c):
                     self.change_current_state('DONE')
                 elif c == ' ':
                     continue
                 elif c == '{':
                     self.change_current_state('IN_COMMENT')
-                elif Util.is_num(c):
+                elif is_num(c):
                     self.change_current_state('IN_NUMBER')
-                elif Util.is_str(c):
+                elif is_str(c):
                     self.change_current_state('IN_IDENTIFIER')
-                elif Util.is_col(c):
+                elif is_col(c):
                     self.change_current_state('IN_ASSIGNMENT')
 
             elif self.check_state('IN_COMMENT'):
@@ -72,7 +72,7 @@ class Scanner:
                     self.change_current_state('IN_COMMENT')
 
             elif self.check_state('IN_NUMBER'):
-                if Util.is_num(c):
+                if is_num(c):
                     self.change_current_state('IN_NUMBER')
                 elif c == ' ':
                     self.change_current_state('DONE')
@@ -80,7 +80,7 @@ class Scanner:
                     self.change_current_state('OTHER')
 
             elif self.check_state('IN_IDENTIFIER'):
-                if Util.is_str(c):
+                if is_str(c):
                     self.change_current_state('IN_IDENTIFIER')
                 elif c == ' ':
                     self.change_current_state('DONE')
@@ -104,15 +104,15 @@ class Scanner:
                 self.classify(token)
                 if self.state_other:
                     token = c
-                    if Util.is_col(c):
+                    if is_col(c):
                         self.change_current_state('IN_ASSIGNMENT')
-                    if Util.is_comment(c):
+                    if is_comment(c):
                         self.change_current_state('IN_COMMENT')
-                    if Util.is_num(c):
+                    if is_num(c):
                         self.change_current_state('IN_NUMBER')
-                    if Util.is_str(c):
+                    if is_str(c):
                         self.change_current_state('IN_IDENTIFIER')
-                    if Util.is_symbol(c):
+                    if is_symbol(c):
                         self.classify(c)
                         token = ''
                         self.change_current_state('START')
@@ -126,12 +126,12 @@ class Scanner:
     def classify(self, token):
         if token[-1:] == ' ':
             token = token[0:-1]
-        if Util.is_str(token):
+        if is_str(token):
             if token in self.KEYWORDS:
                 self.tokens.append([token, token])
             else:
                 self.tokens.append([token, 'Identifier'])
-        elif Util.is_num(token):
+        elif is_num(token):
             self.tokens.append([token, 'Number'])
         elif token in self.OPERATORS:
             self.tokens.append([token, self.OPERATORS[token]])
