@@ -43,20 +43,20 @@ def get_file_text(file_name):
 
 def generate_Parse_Tree(Nodes,tokens):
 
-    dot = Graph(comment='Syntax Tree',format = 'png')
+    parse_tree = Graph(comment='Syntax Tree',format = 'png')
 
     for Node in Nodes:
         if(is_statment(Node)):
-            dot.node(str(Node.id),Node.value,shape='square')
+            parse_tree.node(str(Node.id),Node.value,shape='square')
         else:
-            dot.node(str(Node.id),Node.value)
+            parse_tree.node(str(Node.id),Node.value)
 
     for Node in Nodes:
         if(Node.parent_id!=0) and (Node.connect_Parent):
-            dot.edge(str(Node.parent_id),str(Node.id))
+            parse_tree.edge(str(Node.parent_id),str(Node.id))
 
         elif (Node.parent_id!=0):
-            dot.edge(str(Node.parent_id),str(Node.id),style='dashed', color='white')
+            parse_tree.edge(str(Node.parent_id),str(Node.id),style='dashed', color='white')
 
     for i in range(len(Nodes)):
         for j in range(i+1,len(Nodes)):
@@ -64,7 +64,7 @@ def generate_Parse_Tree(Nodes,tokens):
             if((Nodes[i].parent_id==Nodes[j].parent_id) and (not Nodes[j].connect_Parent) and
             is_statment(Nodes[j]) and (is_statment(Nodes[i]))):
 
-                dot.edge(str(Nodes[i].id),str(Nodes[j].id),constraint='false')
+                parse_tree.edge(str(Nodes[i].id),str(Nodes[j].id),constraint='false')
                 break
 
             elif((Nodes[i].parent_id==Nodes[j].parent_id) and Nodes[j].connect_Parent and
@@ -72,7 +72,7 @@ def generate_Parse_Tree(Nodes,tokens):
 
                 break
 
-    dot.render('Syntax-Tree.gv',view=True)
+    parse_tree.render('Syntax-Tree.gv',view=True)
 
     while (len(tokens)):
         tokens.pop()
