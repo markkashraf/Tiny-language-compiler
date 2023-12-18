@@ -9,20 +9,26 @@ class Parser:
         self.Nodes = []
         self.Parents = []
         self.Parents.append(0)
-
+        self.error = False
         self.current_node_id = 1
         self.connect_Parent = True
 
+    def is_error(self):
+        return self.error
     def match(self, expectedtoken):
         if (self.tokens[self.iterator][0] == expectedtoken) or (self.tokens[self.iterator][1] == expectedtoken):
             self.iterator += 1
         else:
             self.iterator = -1
+            self.error = True
 
     def program(self):
         self.stmtsequence()
-
+        return self.error
     def stmtsequence(self):
+        if self.error:
+            return
+
         self.connect_Parent = True
         self.statment()
 
@@ -32,7 +38,8 @@ class Parser:
             self.statment()
 
     def statment(self):
-
+        if self.error:
+            return
         if (len(self.tokens)):
             newnode = Tree_node(self.tokens[self.iterator][0], self.current_node_id, self.Parents[-1])
             newnode.connect_Parent = self.connect_Parent
@@ -57,6 +64,8 @@ class Parser:
                 self.Parents.pop()
 
     def if_stmt(self):
+        if self.error:
+            return
         self.match("if")
         self.exp()
         self.match("then")
@@ -67,24 +76,31 @@ class Parser:
         self.match("end")
 
     def repeat_stmt(self):
+        if self.error:
+            return
         self.match("repeat")
         self.stmtsequence()
         self.match("until")
         self.exp()
 
     def read_stmt(self):
+        if self.error:
+            return
         self.match("read")
         if (self.tokens[self.iterator][1] == "IDENTIFIER"):
             self.Nodes[-1].value = "read\n(" + self.tokens[self.iterator][0] + ")"
             self.match("IDENTIFIER")
 
     def write_stmt(self):
-
+        if self.error:
+            return
         self.match("write")
         self.exp()
         return
 
     def assign_stmt(self):
+        if self.error:
+            return
         if (self.tokens[self.iterator][1] == "IDENTIFIER"):
             self.match("IDENTIFIER")
         self.match(":=")
@@ -92,7 +108,8 @@ class Parser:
         return
 
     def exp(self):
-
+        if self.error:
+            return
         self.simple_exp()
         if (self.iterator < len(self.tokens)):
             if (self.tokens[self.iterator][0] == "<" or self.tokens[self.iterator][0] == "="):
@@ -102,21 +119,23 @@ class Parser:
         return
 
     def simple_exp(self):
-
+        if self.error:
+            return
         self.term()
         nestedOp = 0
-        if (self.iterator < len(self.tokens)):
-            while (self.tokens[self.iterator][0] == "+" or self.tokens[self.iterator][0] == "-"):
-                self.addop()
-                self.term()
-                nestedOp += 1
+
+        while ((self.iterator < len(self.tokens)) and (self.tokens[self.iterator][0] == "+" or self.tokens[self.iterator][0] == "-")):
+            self.addop()
+            self.term()
+            nestedOp += 1
         while (nestedOp > 0):
             self.Parents.pop()
             nestedOp -= 1
         return
 
     def comparison_exp(self):
-
+        if self.error:
+            return
         newnode = Tree_node("Op\n(" + self.tokens[self.iterator][0] + ")", self.current_node_id, self.Parents[-1])
         self.Nodes.append(newnode)
         self.Parents.append(newnode.get_id())
@@ -128,7 +147,8 @@ class Parser:
             self.match("=")
 
     def addop(self):
-
+        if self.error:
+            return
         newnode = Tree_node("Op\n(" + self.tokens[self.iterator][0] + ")", self.current_node_id, self.Parents[-1])
         self.Nodes.append(newnode)
         self.Parents.append(newnode.get_id())
@@ -140,20 +160,24 @@ class Parser:
             self.match("-")
 
     def term(self):
-
+        if self.error:
+            return
         self.factor()
         nestedOp = 0
-        if (self.iterator < len(self.tokens)):
-            while (self.tokens[self.iterator][0] == "*"):
-                self.mulop()
-                self.factor()
-                nestedOp += 1
+
+        while ((self.iterator < len(self.tokens))and(self.tokens[self.iterator][0] == "*" or self.tokens[self.iterator][0] == "/")):
+            self.mulop()
+            self.factor()
+            nestedOp += 1
+
+
         while (nestedOp > 0):
             self.Parents.pop()
             nestedOp -= 1
 
     def mulop(self):
-
+        if self.error:
+            return
         newnode = Tree_node("Op\n(" + self.tokens[self.iterator][0] + ")", self.current_node_id, self.Parents[-1])
         self.Nodes.append(newnode)
         self.Parents.append(newnode.get_id())
@@ -165,8 +189,13 @@ class Parser:
             self.match("/")
 
     def factor(self):
-
-        if (self.tokens[self.iterator][1] == "NUMBER"):
+        if self.error:
+            return
+        if (self.tokens[self.iterator][0] == "("):
+            self.match("(")
+            self.exp()
+            self.match(")")
+        elif (self.tokens[self.iterator][1] == "NUMBER"):
             newnode = Tree_node("const\n(" + self.tokens[self.iterator][0] + ")", self.current_node_id,
                                 self.Parents[-1])
             self.Nodes.append(newnode)

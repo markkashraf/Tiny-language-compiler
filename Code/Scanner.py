@@ -15,13 +15,13 @@ class Scanner:
     OPERATORS = {
         '+': 'Plus',
         '-': 'Minus',
-        '*': 'Multiply',
-        '/': 'Divide',
+        '*': 'Mult',
+        '/': 'Div',
         ':': 'Colon',
         '=': 'Equal',
         ':=': 'Assign',
         '>': 'Greater',
-        '<': 'Less',
+        '<': 'Lessthan',
         ';': 'Semicolon',
         '(': 'OpenBracket',
         ')': 'ClosedBracket'
