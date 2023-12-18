@@ -22,15 +22,19 @@ class Parser:
 
     def program(self):
         self.stmtsequence()
+        if (self.iterator < len(self.tokens)):
+            raise ValueError()
     def stmtsequence(self):
 
         self.connect_Parent = True
         self.statment()
 
         while (self.iterator < len(self.tokens) and self.tokens[self.iterator][0] == ';'):
+
             self.connect_Parent = False
             self.match(";")
             self.statment()
+
 
     def statment(self):
         if (len(self.tokens)):

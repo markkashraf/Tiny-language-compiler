@@ -93,7 +93,8 @@ def parse():
     try:
         pr_obj.program()
     except ValueError as v:
-        messagebox.showerror("Error", "Syntax error")
+        messagebox.showerror("Error", "Syntax error\n"
+                                      "This code is not accepted by Tiny language")
     else:
         Util.generate_Parse_Tree(pr_obj.Nodes, pr_obj.tokens)
 
