@@ -1,5 +1,5 @@
 
-from Node import *
+from Tree_node import *
 
 class Parser:
 
@@ -34,7 +34,7 @@ class Parser:
     def statment(self):
         
         if (len(self.tokens)):
-            newnode = Node(self.tokens[self.iterator][0], self.current_node_id, self.Parents[-1])
+            newnode = Tree_node(self.tokens[self.iterator][0], self.current_node_id, self.Parents[-1])
             newnode.connect_Parent = self.connect_Parent
             self.Nodes.append(newnode)
             self.current_node_id = newnode.get_id() + 1
@@ -117,7 +117,7 @@ class Parser:
 
     def comparison_exp(self):
         
-        newnode = Node("Op\n(" + self.tokens[self.iterator][0] + ")", self.current_node_id, self.Parents[-1])
+        newnode = Tree_node("Op\n(" + self.tokens[self.iterator][0] + ")", self.current_node_id, self.Parents[-1])
         self.Nodes.append(newnode)
         self.Parents.append(newnode.get_id())
         self.Nodes[self.current_node_id - 2].parentNode = self.Parents[-1]
@@ -129,7 +129,7 @@ class Parser:
 
     def addop(self):
 
-        newnode = Node("Op\n(" + self.tokens[self.iterator][0] + ")", self.current_node_id, self.Parents[-1])
+        newnode = Tree_node("Op\n(" + self.tokens[self.iterator][0] + ")", self.current_node_id, self.Parents[-1])
         self.Nodes.append(newnode)
         self.Parents.append(newnode.get_id())
         self.Nodes[self.current_node_id - 2].parentNode = self.Parents[-1]
@@ -154,7 +154,7 @@ class Parser:
 
     def mulop(self):
 
-        newnode = Node("Op\n(" + self.tokens[self.iterator][0] + ")", self.current_node_id, self.Parents[-1])
+        newnode = Tree_node("Op\n(" + self.tokens[self.iterator][0] + ")", self.current_node_id, self.Parents[-1])
         self.Nodes.append(newnode)
         self.Parents.append(newnode.get_id())
         self.Nodes[self.current_node_id - 2].parentNode = self.Parents[-1]
@@ -167,12 +167,12 @@ class Parser:
     def factor(self):
 
         if (self.tokens[self.iterator][1] == "Number"):
-            newnode = Node("const\n(" + self.tokens[self.iterator][0] + ")", self.current_node_id, self.Parents[-1])
+            newnode = Tree_node("const\n(" + self.tokens[self.iterator][0] + ")", self.current_node_id, self.Parents[-1])
             self.Nodes.append(newnode)
             self.current_node_id = newnode.get_id() + 1
             self.match("Number")
         elif (self.tokens[self.iterator][1] == "Identifier"):
-            newnode = Node("Identifier\n(" + self.tokens[self.iterator][0] + ")", self.current_node_id, self.Parents[-1])
+            newnode = Tree_node("Identifier\n(" + self.tokens[self.iterator][0] + ")", self.current_node_id, self.Parents[-1])
             self.Nodes.append(newnode)
             self.current_node_id = newnode.get_id() + 1
             self.match("Identifier")
