@@ -9,9 +9,9 @@ class Node:
         self.value = value
     def is_statment(self):
         statment = ["if","repeat","assign","read","write"]
-        splitted = self.value.split("\n")
-        for token in splitted:
-            if(token in statment):
+        str = self.value.split("\n")
+        for token in str:
+            if token in statment:
                 return True
         return False
 
