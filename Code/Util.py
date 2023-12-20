@@ -33,19 +33,23 @@ def is_statment(Node):
             return True
         return False
 
-def check_left(tokens,it):
+
+def check_left(tokens, it):
     if (not (tokens[it - 1][1] == "IDENTIFIER" or tokens[it - 1][
         1] == "NUMBER" or tokens[it - 1][0] == ')')):
         return False
     else:
         return True
 
-def check_right(tokens,it):
+
+def check_right(tokens, it):
     if (not (tokens[it + 1][1] == "IDENTIFIER" or tokens[it + 1][
         1] == "NUMBER" or tokens[it + 1][0] == '(')):
         return False
     else:
         return True
+
+
 def get_file_text(file_name):
     with open(file_name, 'r') as f:
         input_text = f.read()
@@ -59,9 +63,9 @@ def generate_Parse_Tree(Nodes, tokens):
 
     for Node in Nodes:
         if (is_statment(Node)):
-            parse_tree.node(str(Node.id), Node.value, shape='square')
+            parse_tree.node(str(Node.id), Node.value, shape='square', color='#f07167', style="filled")
         else:
-            parse_tree.node(str(Node.id), Node.value)
+            parse_tree.node(str(Node.id), Node.value, color='#0081a7', style='filled')
 
     for Node in Nodes:
         if (Node.parent_id != 0) and (Node.connect_Parent):

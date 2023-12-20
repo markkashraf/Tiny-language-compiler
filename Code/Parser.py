@@ -132,7 +132,6 @@ class Parser:
                 else:
                     self.nested_op = 0
 
-
         while self.nested_parents_to_pop > 0 and self.nested_op == 0:
             self.Parents.pop()
             self.nested_parents_to_pop -= 1
@@ -188,7 +187,6 @@ class Parser:
     def term(self):
 
         self.factor()
-
 
         while ((self.iterator < len(self.tokens)) and (
                 self.tokens[self.iterator][0] == "*" or self.tokens[self.iterator][0] == "/")):
