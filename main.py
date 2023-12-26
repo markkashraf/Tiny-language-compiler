@@ -28,20 +28,23 @@ filepath = StringVar
 
 def open_file():
     global filepath
-    filepath = filedialog.askopenfilename(title="Select A File", filetypes=(("text files", "*.txt"),))
+    filepath = filedialog.askopenfilename(title="Select A Text File")
     if filepath:
-        global file_opened
-        file_opened = True
-        with open(filepath, 'r', encoding='utf-8') as file:
-            file_content = file.read()
-            file_field.config(state="normal")
-            file_field.delete("1.0", END)
-            file_field.insert(END, file_content)
-            file_field.config(state="disabled")
-        scan_button.config(state="normal")
-        parse_button.config(state="normal")
+        if not filepath.split('.')[1] == "txt":
+            messagebox.showerror("File Type Error", "Please choose a Text file!!")
+        else:
+            global file_opened
+            file_opened = True
+            with open(filepath, 'r', encoding='utf-8') as file:
+                file_content = file.read()
+                file_field.config(state="normal")
+                file_field.delete("1.0", END)
+                file_field.insert(END, file_content)
+                file_field.config(state="disabled")
+            scan_button.config(state="normal")
+            parse_button.config(state="normal")
     else:
-        messagebox.showerror("Error", "Please choose a valid file!!")
+        messagebox.showerror("File Error", "Please choose a file!!")
 
 
 file_opened = False
