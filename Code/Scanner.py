@@ -140,6 +140,6 @@ class Scanner:
 
     # export data to an output file
     def export(self):
-        with open('output.txt', 'w') as f:
+        with open('Tokens.txt', 'w') as f:
             for token in self.tokens:
                 f.write('{:}, {:}\n'.format(token[0], token[1]))
