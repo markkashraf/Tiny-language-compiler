@@ -11,7 +11,7 @@ os.environ["PATH"] += os.pathsep + dirpath + os.pathsep + 'Graphviz\\bin'
 
 status = False
 root = Tk()
-
+root.resizable(False,False)
 root.title('Tiny Language Compiler')
 root.config(bg="#fed9b7")
 
