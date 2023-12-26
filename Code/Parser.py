@@ -15,6 +15,7 @@ class Parser:
         self.connect_Parent = True
         self.nested_op = 0
         self.nested_parents_to_pop = 0
+        self.nested_conditions = 0
 
     def match(self, expectedtoken):
         if (self.tokens[self.iterator][0] == expectedtoken) or (self.tokens[self.iterator][1] == expectedtoken):
@@ -24,7 +25,7 @@ class Parser:
 
     def program(self):
         self.stmtsequence()
-        if self.iterator < len(self.tokens):
+        if self.iterator < len(self.tokens) or self.nested_conditions > 0:
             raise ValueError()
 
     def stmtsequence(self):
@@ -39,6 +40,7 @@ class Parser:
             if self.iterator >= len(self.tokens):
                 raise ValueError()
             self.statment()
+
 
     def statment(self):
 
@@ -70,7 +72,7 @@ class Parser:
             return newnode
 
     def if_stmt(self):
-
+        self.nested_conditions+=1
         self.match("if")
         ret = self.exp()
         self.match("then")
@@ -80,6 +82,7 @@ class Parser:
                 self.match("else")
                 self.stmtsequence()
             self.match("end")
+            self.nested_conditions-=1
         return ret
 
     def repeat_stmt(self):
