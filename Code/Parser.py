@@ -116,7 +116,7 @@ class Parser:
         represent = e1
         self.nested_op = 0
         if self.iterator < len(self.tokens):
-            if self.tokens[self.iterator][0] == "<" or self.tokens[self.iterator][0] == "=":
+            if self.tokens[self.iterator][0] == "<" or self.tokens[self.iterator][0] == "=" or self.tokens[self.iterator][0] == ">":
                 op = self.comparison_exp()
                 e2 = self.simple_exp()
                 e1.parent_id = op.get_id()
@@ -169,6 +169,13 @@ class Parser:
 
             if Util.check_left(self.tokens, self.iterator) and Util.check_right(self.tokens, self.iterator):
                 self.match("=")
+            else:
+                raise ValueError()
+
+        elif self.tokens[self.iterator][0] == ">":
+
+            if Util.check_left(self.tokens, self.iterator) and Util.check_right(self.tokens, self.iterator):
+                self.match(">")
             else:
                 raise ValueError()
         return newnode
