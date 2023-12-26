@@ -100,7 +100,7 @@ def parse():
         messagebox.showerror("Error", "Syntax error\n"
                                       "This code is not accepted by Tiny language")
     else:
-        Util.generate_Parse_Tree(pr_obj.Nodes, pr_obj.tokens)
+        Util.generate_Parse_Tree(pr_obj.Nodes)
 
 
 parse_button = Button(options_frame, text="PARSE", pady=10, padx=20, width=27, bg="#0081a7", fg="#90e0ef",

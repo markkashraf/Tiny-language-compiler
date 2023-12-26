@@ -43,8 +43,7 @@ def check_left(tokens, it):
 
 
 def check_right(tokens, it):
-    if (not (tokens[it + 1][1] == "IDENTIFIER" or tokens[it + 1][
-        1] == "NUMBER" or tokens[it + 1][0] == '(')):
+    if not (tokens[it + 1][1] == "IDENTIFIER" or tokens[it + 1][1] == "NUMBER" or tokens[it + 1][0] == '('):
         return False
     else:
         return True
@@ -58,21 +57,21 @@ def get_file_text(file_name):
         return input_text
 
 
-def generate_Parse_Tree(Nodes, tokens):
-    parse_tree = Graph(comment='Syntax Tree', format='png')
+def generate_Parse_Tree(Nodes):
+    parse_tree = Graph(comment='Parse Tree', format='png')
 
     for Node in Nodes:
-        if (is_statment(Node)):
+        if is_statment(Node):
             parse_tree.node(str(Node.id), Node.value, shape='square', color='#f07167', style="filled")
         else:
             parse_tree.node(str(Node.id), Node.value, color='#0081a7', style='filled')
 
     for Node in Nodes:
-        if (Node.parent_id != 0) and (Node.connect_Parent):
+        if (Node.parent_id != 0) and Node.connect_Parent:
             parse_tree.edge(str(Node.parent_id), str(Node.id))
 
-        elif (Node.parent_id != 0):
-            parse_tree.edge(str(Node.parent_id), str(Node.id), style='dashed', color='white')
+        elif Node.parent_id != 0:
+            parse_tree.edge(str(Node.parent_id), str(Node.id), color='white')
 
     for i in range(len(Nodes)):
         for j in range(i + 1, len(Nodes)):
@@ -85,14 +84,8 @@ def generate_Parse_Tree(Nodes, tokens):
 
             elif ((Nodes[i].parent_id == Nodes[j].parent_id) and Nodes[j].connect_Parent and
                   is_statment(Nodes[j]) and (is_statment(Nodes[i]))):
-
                 break
 
-    parse_tree.render('Syntax-Tree.gv', view=True)
-
-    while (len(tokens)):
-        tokens.pop()
-    while (len(Nodes)):
-        Nodes.pop()
+    parse_tree.render('Parse-Tree.gv', view=True)
 
     return
