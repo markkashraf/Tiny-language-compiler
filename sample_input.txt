@@ -1,10 +1,10 @@
 read x; {input an integer }
 if 0 < x then { don’t compute if x <= 0 }
-    fact  1;
+    fact := 1;
     repeat
-        fact := fact  x;
+        fact := fact + x;
         x := x * 2 + 3 + 5
-    until x = ;
+    until x = 0;
     write fact { output factorial of x }
 else
     if b = 1 then
