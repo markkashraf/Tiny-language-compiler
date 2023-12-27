@@ -31,6 +31,12 @@ def open_file():
     filepath = filedialog.askopenfilename(title="Select A Text File")
     if filepath:
         if not filepath.split('.')[1] == "txt":
+            output_text.config(state="normal")
+            file_field.config(state="normal")
+            file_field.delete("1.0", END)
+            output_text.delete("1.0", END)
+            file_field.config(state="disabled")
+            output_text.config(state="disabled")
             messagebox.showerror("File Type Error", "Please choose a Text file!!")
         else:
             global file_opened
@@ -43,7 +49,14 @@ def open_file():
                 file_field.config(state="disabled")
 
     else:
+        file_opened = False
+        output_text.config(state="normal")
+        file_field.config(state="normal")
+        file_field.delete("1.0", END)
+        output_text.delete("1.0", END)
         messagebox.showerror("File Error", "Please choose a file!!")
+        file_field.config(state="disabled")
+        output_text.config(state="disabled")
 
 file_button = Button(file_frame, text="Open File", command=open_file, width=68, bg="#f07167")
 file_button.grid(row=1, column=0)
@@ -62,7 +75,13 @@ def scan():
     global filepath
 
     if not file_opened:
+        output_text.config(state="normal")
+        file_field.config(state="normal")
+        file_field.delete("1.0", END)
+        output_text.delete("1.0", END)
         messagebox.showerror("File Error", "Please choose a file!!")
+        file_field.config(state="disabled")
+        output_text.config(state="disabled")
     else:
         obj = Scanner()
         obj.tokenize(filepath)
@@ -84,7 +103,13 @@ def parse():
     # scanning
     global filepath
     if not file_opened:
+        output_text.config(state="normal")
+        file_field.config(state="normal")
+        file_field.delete("1.0", END)
+        output_text.delete("1.0", END)
         messagebox.showerror("File Error", "Please choose a file!!")
+        file_field.config(state="disabled")
+        output_text.config(state="disabled")
     else:
         obj = Scanner()
         tokens = obj.tokenize(filepath)
