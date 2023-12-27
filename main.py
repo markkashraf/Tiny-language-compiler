@@ -79,7 +79,7 @@ def scan():
         file_field.config(state="normal")
         file_field.delete("1.0", END)
         output_text.delete("1.0", END)
-        messagebox.showerror("File Error", "Please choose a file!!")
+        messagebox.showerror("File Error", "Please choose a file before doing any operation!!")
         file_field.config(state="disabled")
         output_text.config(state="disabled")
     else:
@@ -107,7 +107,7 @@ def parse():
         file_field.config(state="normal")
         file_field.delete("1.0", END)
         output_text.delete("1.0", END)
-        messagebox.showerror("File Error", "Please choose a file!!")
+        messagebox.showerror("File Error", "Please choose a file before doing any operation!!")
         file_field.config(state="disabled")
         output_text.config(state="disabled")
     else:
