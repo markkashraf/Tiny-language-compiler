@@ -35,8 +35,7 @@ def is_statment(Node):
 
 
 def check_left(tokens, it):
-    if (not (tokens[it - 1][1] == "IDENTIFIER" or tokens[it - 1][
-        1] == "NUMBER" or tokens[it - 1][0] == ')')):
+    if not (tokens[it - 1][1] == "IDENTIFIER" or tokens[it - 1][1] == "NUMBER" or tokens[it - 1][0] == ')'):
         return False
     else:
         return True
