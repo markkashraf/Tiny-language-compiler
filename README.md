@@ -41,13 +41,3 @@ This is a tiny language compiler that includes a scanner and a parser, equipped 
 
 
 The GUI can display the tokens and parse tree, helping users understand the structure of the code.
-
-
-
-## Contributing
-
-Contributions are welcome! Please follow the [contribution guidelines](CONTRIBUTING.md) when submitting pull requests.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
